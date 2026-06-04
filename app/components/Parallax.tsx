@@ -2,20 +2,16 @@
 
 import { useRef, type ReactNode } from "react";
 import { motion, useScroll, useSpring, useTransform } from "motion/react";
+import { useIsMobile } from "./useIsMobile";
 
-/**
- * Vertical parallax: translates its children as the element
- * travels through the viewport. Positive `distance` = the element
- * lags (drifts down) on entry and rises on exit.
- */
-export default function Parallax({
+function ParallaxMotion({
   children,
   className,
-  distance = 60,
+  distance,
 }: {
   children: ReactNode;
   className?: string;
-  distance?: number;
+  distance: number;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
@@ -33,5 +29,30 @@ export default function Parallax({
     <motion.div ref={ref} style={{ y }} className={className}>
       {children}
     </motion.div>
+  );
+}
+
+/**
+ * Vertical parallax on desktop; static (no scroll listeners) on touch devices.
+ */
+export default function Parallax({
+  children,
+  className,
+  distance = 60,
+}: {
+  children: ReactNode;
+  className?: string;
+  distance?: number;
+}) {
+  const isMobile = useIsMobile();
+
+  if (isMobile) {
+    return <div className={className}>{children}</div>;
+  }
+
+  return (
+    <ParallaxMotion className={className} distance={distance}>
+      {children}
+    </ParallaxMotion>
   );
 }

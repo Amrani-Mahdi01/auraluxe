@@ -6,9 +6,11 @@ import { motion, useScroll, useSpring, useTransform } from "motion/react";
 import Reveal from "./Reveal";
 import Parallax from "./Parallax";
 import HeadingReveal from "./HeadingReveal";
+import { useIsMobile } from "./useIsMobile";
 
 export default function Story() {
   const ref = useRef<HTMLDivElement>(null);
+  const isMobile = useIsMobile();
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start end", "end start"],
@@ -30,7 +32,10 @@ export default function Story() {
         {/* image */}
         <div ref={ref} className="relative order-2 lg:order-1">
           <div className="relative aspect-[4/5] overflow-hidden rounded-[2rem] border border-white/10">
-            <motion.div style={{ y, scale }} className="absolute -inset-y-[8%] inset-x-0">
+            <motion.div
+              style={isMobile ? undefined : { y, scale }}
+              className="absolute -inset-y-[8%] inset-x-0"
+            >
               <Image
                 src="/products/noirflora.jpg"
                 alt="Dried botanicals used in AuraLuxe compositions"

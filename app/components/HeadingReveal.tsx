@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, type Variants } from "motion/react";
+import { useIsMobile } from "./useIsMobile";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
@@ -20,6 +21,12 @@ const wordV: Variants = {
   },
 };
 
+// Lighter version for touch devices — no blur or 3D flip (cheap to render).
+const wordMobile: Variants = {
+  hidden: { opacity: 0, y: "0.4em" },
+  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: EASE } },
+};
+
 type Segment = { text: string; className?: string };
 
 /**
@@ -34,6 +41,8 @@ export default function HeadingReveal({
   segments: Segment[];
   className?: string;
 }) {
+  const isMobile = useIsMobile();
+  const variant = isMobile ? wordMobile : wordV;
   return (
     <motion.h2
       variants={container}
@@ -47,10 +56,10 @@ export default function HeadingReveal({
           <span
             key={`${si}-${wi}`}
             className="mr-[0.24em] inline-block"
-            style={{ perspective: 600 }}
+            style={isMobile ? undefined : { perspective: 600 }}
           >
             <motion.span
-              variants={wordV}
+              variants={variant}
               className={`inline-block ${seg.className ?? ""}`}
               style={{ transformOrigin: "bottom center" }}
             >

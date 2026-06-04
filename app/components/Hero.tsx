@@ -10,6 +10,7 @@ import {
 } from "motion/react";
 import MagneticButton from "./MagneticButton";
 import ProductMarquee from "./ProductMarquee";
+import { useIsMobile } from "./useIsMobile";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
@@ -56,6 +57,7 @@ const STATS = [
 
 export default function Hero() {
   const ref = useRef<HTMLElement>(null);
+  const isMobile = useIsMobile();
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start start", "end start"],
@@ -91,7 +93,11 @@ export default function Hero() {
       <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-10 px-6 pb-28 lg:grid-cols-[1.05fr_0.95fr] lg:gap-6">
         {/* ---- Text column (scroll-parallax wrapper) ---- */}
         <motion.div
-          style={{ y: textY, opacity: textOpacity, filter: textFilter }}
+          style={
+            isMobile
+              ? undefined
+              : { y: textY, opacity: textOpacity, filter: textFilter }
+          }
           className="relative z-10"
         >
           <motion.div
@@ -182,7 +188,10 @@ export default function Hero() {
         </motion.div>
 
         {/* ---- Bottle column (slower parallax for depth) ---- */}
-        <motion.div style={{ y: showcaseY }} className="relative">
+        <motion.div
+          style={isMobile ? undefined : { y: showcaseY }}
+          className="relative"
+        >
           <motion.div
             initial={{ opacity: 0, scale: 0.86, y: 30 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}

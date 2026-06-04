@@ -7,6 +7,7 @@ import {
   useTransform,
   type MotionValue,
 } from "motion/react";
+import { useIsMobile } from "./useIsMobile";
 
 function Word({
   children,
@@ -48,12 +49,17 @@ export default function ScrollReveal({
   end?: number;
 }) {
   const ref = useRef<HTMLParagraphElement>(null);
+  const isMobile = useIsMobile();
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: [`start ${start}`, `end ${end}`],
   });
 
   const words = children.split(" ");
+
+  if (isMobile) {
+    return <p className={className}>{children}</p>;
+  }
 
   return (
     <p ref={ref} className={className}>
