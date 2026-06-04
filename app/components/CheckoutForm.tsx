@@ -350,9 +350,9 @@ export default function CheckoutForm() {
 
             <button
               type="submit"
-              className="group mt-6 flex w-full items-center justify-center gap-3 rounded-full bg-gradient-to-r from-gold-soft via-gold to-gold-deep py-4 text-sm font-semibold uppercase tracking-[0.14em] text-ink shadow-[0_18px_40px_-12px_rgba(204,168,105,0.6)] transition-transform duration-300 hover:scale-[1.01]"
+              className="group mt-6 flex w-full items-center justify-center gap-2.5 whitespace-nowrap rounded-full bg-gradient-to-r from-gold-soft via-gold to-gold-deep py-4 text-sm font-semibold uppercase tracking-[0.12em] text-ink shadow-[0_18px_40px_-12px_rgba(204,168,105,0.6)] transition-transform duration-300 hover:scale-[1.01]"
             >
-              Confirm order — {formatPrice(total)}
+              Confirm order
               <span className="transition-transform duration-500 group-hover:translate-x-1">
                 →
               </span>
