@@ -1,26 +1,411 @@
 @import "tailwindcss";
 
+/* ============================================================
+   AURALUXE — Atelier Nocturne design system
+   ============================================================ */
+
+@theme {
+  /* Palette — warm near-black with champagne + rose glow */
+  --color-ink: #0c0a08;
+  --color-ink-2: #15110c;
+  --color-ink-3: #1d1810;
+  --color-bone: #f2eae0;
+  --color-bone-dim: #b6aa97;
+  --color-bone-mute: #8a7f6e;
+  --color-gold: #cca869;
+  --color-gold-soft: #e7d3a5;
+  --color-gold-deep: #9d7c40;
+  --color-rose: #cf9384;
+
+  /* Typography */
+  --font-display: var(--font-fraunces), Georgia, serif;
+  --font-sans: var(--font-hanken), ui-sans-serif, system-ui, sans-serif;
+
+  /* Easing */
+  --ease-luxe: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: dark;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+* {
+  -webkit-tap-highlight-color: transparent;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
+}
+
+/* Lenis smooth scroll */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: clip;
+}
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+  background-color: var(--color-ink);
+  /* layered radial atmosphere */
+  background-image:
+    radial-gradient(
+      120% 80% at 78% -8%,
+      rgba(204, 168, 105, 0.16) 0%,
+      transparent 55%
+    ),
+    radial-gradient(
+      90% 70% at 8% 4%,
+      rgba(207, 147, 132, 0.1) 0%,
+      transparent 50%
+    ),
+    radial-gradient(140% 120% at 50% 120%, rgba(29, 24, 16, 0.9) 0%, transparent 60%);
+  background-attachment: fixed;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--color-gold);
+  color: var(--color-ink);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-ink);
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(var(--color-gold-deep), var(--color-ink-3));
+  border-radius: 999px;
+  border: 2px solid var(--color-ink);
+}
+
+/* ---------- Reusable display helpers ---------- */
+.font-display {
+  font-family: var(--font-display);
+}
+
+.text-gold-grad {
+  background: linear-gradient(
+    100deg,
+    var(--color-gold-soft) 0%,
+    var(--color-gold) 38%,
+    var(--color-rose) 72%,
+    var(--color-gold-soft) 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.eyebrow {
+  font-family: var(--font-sans);
+  text-transform: uppercase;
+  letter-spacing: 0.32em;
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: var(--color-bone-dim);
+}
+
+.hairline {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(204, 168, 105, 0.5),
+    transparent
+  );
+}
+
+/* ---------- Film grain overlay ---------- */
+.grain {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.05;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation: grain-shift 0.7s steps(4) infinite;
+}
+
+@keyframes grain-shift {
+  0% { transform: translate(0, 0); }
+  25% { transform: translate(-3%, 2%); }
+  50% { transform: translate(2%, -3%); }
+  75% { transform: translate(-2%, -2%); }
+  100% { transform: translate(2%, 3%); }
+}
+
+/* ---------- Drifting scent mist ---------- */
+.mist {
+  position: absolute;
+  border-radius: 999px;
+  filter: blur(70px);
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+.mist-gold {
+  background: radial-gradient(circle, rgba(204, 168, 105, 0.55), transparent 70%);
+  animation: drift-a 18s var(--ease-luxe) infinite alternate;
+}
+.mist-rose {
+  background: radial-gradient(circle, rgba(207, 147, 132, 0.4), transparent 70%);
+  animation: drift-b 22s var(--ease-luxe) infinite alternate;
+}
+
+@keyframes drift-a {
+  0% { transform: translate(0, 0) scale(1); opacity: 0.7; }
+  50% { transform: translate(40px, -30px) scale(1.15); opacity: 1; }
+  100% { transform: translate(-30px, 20px) scale(0.95); opacity: 0.6; }
+}
+@keyframes drift-b {
+  0% { transform: translate(0, 0) scale(1.05); opacity: 0.5; }
+  50% { transform: translate(-45px, 25px) scale(1.2); opacity: 0.85; }
+  100% { transform: translate(25px, -20px) scale(1); opacity: 0.55; }
+}
+
+/* ---------- The flacon (CSS perfume bottle) ---------- */
+.aura-halo {
+  background: conic-gradient(
+    from 0deg,
+    rgba(204, 168, 105, 0.55),
+    rgba(207, 147, 132, 0.35),
+    rgba(204, 168, 105, 0.1),
+    rgba(231, 211, 165, 0.5),
+    rgba(204, 168, 105, 0.55)
+  );
+  filter: blur(46px);
+  animation: spin-slow 26s linear infinite;
+}
+
+@keyframes spin-slow {
+  to { transform: rotate(360deg); }
+}
+
+.flacon-glass {
+  background: linear-gradient(
+    155deg,
+    rgba(255, 255, 255, 0.16) 0%,
+    rgba(255, 255, 255, 0.02) 38%,
+    rgba(255, 255, 255, 0.05) 62%,
+    rgba(255, 255, 255, 0.12) 100%
+  );
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow:
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.5),
+    inset 0 -40px 70px rgba(0, 0, 0, 0.45),
+    inset 18px 0 40px rgba(255, 255, 255, 0.05),
+    0 50px 90px -25px rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(4px);
+}
+
+.flacon-liquid {
+  background: linear-gradient(
+    180deg,
+    #f0d293 0%,
+    #d8ad62 28%,
+    #b9863e 64%,
+    #8f6328 100%
+  );
+  box-shadow:
+    inset 0 12px 34px rgba(255, 244, 214, 0.5),
+    inset 0 -14px 30px rgba(0, 0, 0, 0.35);
+}
+
+.flacon-cap {
+  background: linear-gradient(
+    150deg,
+    #1c1812 0%,
+    #2c251a 30%,
+    #0e0b07 100%
+  );
+  box-shadow:
+    inset 0 2px 1px rgba(231, 211, 165, 0.4),
+    inset 0 -8px 14px rgba(0, 0, 0, 0.6),
+    0 8px 20px rgba(0, 0, 0, 0.6);
+}
+
+.flacon-shine {
+  background: linear-gradient(
+    115deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.55) 45%,
+    rgba(255, 255, 255, 0.08) 52%,
+    transparent 60%
+  );
+}
+
+.float-y {
+  animation: float-y 7s var(--ease-luxe) infinite alternate;
+}
+@keyframes float-y {
+  to { transform: translateY(-18px); }
+}
+
+/* ---------- Floating particles ---------- */
+.particle {
+  position: absolute;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(231, 211, 165, 0.9), transparent 70%);
+  animation: rise linear infinite;
+  pointer-events: none;
+}
+@keyframes rise {
+  0% { transform: translateY(0) scale(0.6); opacity: 0; }
+  15% { opacity: 0.9; }
+  85% { opacity: 0.5; }
+  100% { transform: translateY(-220px) scale(1.1); opacity: 0; }
+}
+
+/* ---------- Marquee ---------- */
+.marquee-mask {
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #000 8%,
+    #000 92%,
+    transparent
+  );
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+.marquee-track {
+  display: inline-flex;
+  white-space: nowrap;
+  animation: marquee 38s linear infinite;
+}
+@keyframes marquee {
+  to { transform: translateX(-50%); }
+}
+
+/* ---------- Vertical marquee (hero) ---------- */
+.vmask {
+  -webkit-mask-image: linear-gradient(
+    180deg,
+    transparent,
+    #000 11%,
+    #000 89%,
+    transparent
+  );
+  mask-image: linear-gradient(
+    180deg,
+    transparent,
+    #000 11%,
+    #000 89%,
+    transparent
+  );
+}
+.vmarquee:hover .vtrack {
+  animation-play-state: paused;
+}
+.vtrack {
+  will-change: transform;
+}
+.vtrack-up {
+  animation: marquee-up 32s linear infinite;
+}
+.vtrack-down {
+  animation: marquee-down 32s linear infinite;
+}
+@keyframes marquee-up {
+  to { transform: translateY(-50%); }
+}
+@keyframes marquee-down {
+  from { transform: translateY(-50%); }
+  to { transform: translateY(0); }
+}
+
+/* ---------- Shimmer (announcement + cta sheen) ---------- */
+.shimmer {
+  background: linear-gradient(
+    100deg,
+    var(--color-bone-dim) 20%,
+    var(--color-gold-soft) 40%,
+    var(--color-gold) 50%,
+    var(--color-gold-soft) 60%,
+    var(--color-bone-dim) 80%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shimmer 5s linear infinite;
+}
+@keyframes shimmer {
+  to { background-position: 200% center; }
+}
+
+/* ---------- Scroll cue ---------- */
+.scroll-dot {
+  animation: scroll-dot 2.2s var(--ease-luxe) infinite;
+}
+@keyframes scroll-dot {
+  0% { transform: translateY(0); opacity: 0; }
+  30% { opacity: 1; }
+  70% { opacity: 1; }
+  100% { transform: translateY(16px); opacity: 0; }
+}
+
+/* ---------- Dual-range price slider ---------- */
+.price-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  pointer-events: none;
+}
+.price-thumb::-webkit-slider-runnable-track {
+  height: 24px;
+  background: transparent;
+  border: none;
+}
+.price-thumb::-moz-range-track {
+  background: transparent;
+  border: none;
+}
+.price-thumb::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  pointer-events: auto;
+  margin-top: 4px;
+  height: 16px;
+  width: 16px;
+  border-radius: 9999px;
+  background: var(--color-gold);
+  border: 2px solid var(--color-ink);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+}
+.price-thumb::-moz-range-thumb {
+  pointer-events: auto;
+  height: 16px;
+  width: 16px;
+  border-radius: 9999px;
+  background: var(--color-gold);
+  border: 2px solid var(--color-ink);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+}
+
+/* ---------- Reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
 }
