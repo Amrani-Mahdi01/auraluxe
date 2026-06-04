@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, type Variants } from "motion/react";
+import { useIsMobile } from "./useIsMobile";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
@@ -33,6 +34,28 @@ export default function HeadingReveal({
   segments: Segment[];
   className?: string;
 }) {
+  const isMobile = useIsMobile();
+
+  // Mobile: one light fade (no per-word 3D flip).
+  if (isMobile) {
+    return (
+      <motion.h2
+        initial={{ opacity: 0, y: 18 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-90px" }}
+        transition={{ duration: 0.55, ease: EASE }}
+        className={className}
+      >
+        {segments.map((seg, si) => (
+          <span key={si} className={seg.className}>
+            {seg.text}
+            {si < segments.length - 1 ? " " : ""}
+          </span>
+        ))}
+      </motion.h2>
+    );
+  }
+
   return (
     <motion.h2
       variants={container}

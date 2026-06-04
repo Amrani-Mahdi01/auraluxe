@@ -150,9 +150,10 @@ export default function ProductDetail({ product }: { product: Product }) {
                   </div>
                   <div className="h-px w-full bg-white/[0.08]">
                     <motion.div
-                      className="h-px bg-gradient-to-r from-gold to-rose"
-                      initial={{ width: 0 }}
-                      animate={{ width: p.width }}
+                      className="h-px origin-left bg-gradient-to-r from-gold to-rose"
+                      style={{ width: p.width }}
+                      initial={{ scaleX: 0 }}
+                      animate={{ scaleX: 1 }}
                       transition={{ duration: 1, ease: EASE, delay: 0.35 + i * 0.12 }}
                     />
                   </div>

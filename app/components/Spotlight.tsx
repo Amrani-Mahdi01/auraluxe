@@ -116,9 +116,10 @@ export default function Spotlight() {
                 </div>
                 <div className="h-px w-full bg-white/8">
                   <motion.div
-                    className="h-px bg-gradient-to-r from-gold to-rose"
-                    initial={{ width: 0 }}
-                    whileInView={{ width: p.width }}
+                    className="h-px origin-left bg-gradient-to-r from-gold to-rose"
+                    style={{ width: p.width }}
+                    initial={{ scaleX: 0 }}
+                    whileInView={{ scaleX: 1 }}
                     viewport={{ once: true, margin: "-60px" }}
                     transition={{ duration: 1, ease: EASE, delay: 0.2 + i * 0.12 }}
                   />

@@ -427,6 +427,16 @@ body {
   .scroll-dot {
     animation: none;
   }
+  /* stop all continuous loops on mobile */
+  .marquee-track,
+  .vtrack-up,
+  .vtrack-down {
+    animation: none;
+  }
+  .shimmer {
+    animation: none;
+    background-position: 0 center;
+  }
 }
 
 /* ---------- Reduced motion ---------- */
