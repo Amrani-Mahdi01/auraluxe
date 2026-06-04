@@ -20,11 +20,10 @@ const container: Variants = {
 };
 
 const rise: Variants = {
-  hidden: { y: 22, opacity: 0, filter: "blur(8px)" },
+  hidden: { y: 22, opacity: 0 },
   show: {
     y: 0,
     opacity: 1,
-    filter: "blur(0px)",
     transition: { duration: 0.9, ease: EASE },
   },
 };

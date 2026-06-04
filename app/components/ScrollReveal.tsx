@@ -19,15 +19,10 @@ function Word({
   range: [number, number];
 }) {
   const opacity = useTransform(progress, range, [0.12, 1]);
-  const blurN = useTransform(progress, range, [6, 0]);
-  const filter = useTransform(blurN, (v) => `blur(${v}px)`);
   const y = useTransform(progress, range, [12, 0]);
 
   return (
-    <motion.span
-      style={{ opacity, filter, y }}
-      className="mr-[0.24em] inline-block"
-    >
+    <motion.span style={{ opacity, y }} className="mr-[0.24em] inline-block">
       {children}
     </motion.span>
   );
